@@ -12,7 +12,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   config.vm.hostname = 'demo-berkshelf'
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
+  
+  # Every Vagrant virtual environment requires a box to build off of.
+  # If this value is a shorthand to a box in Vagrant Cloud then
+  # config.vm.box_url doesn't need to be specified.
+  config.vm.box = 'bento/ubuntu-14.04'
+
+  
+
   # Set the version of chef to install using the vagrant-omnibus plugin
   # NOTE: You will need to install the vagrant-omnibus plugin:
   #
@@ -21,6 +28,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if Vagrant.has_plugin?("vagrant-omnibus")
     config.omnibus.chef_version = 'latest'
   end
+
+  # -----------------------------------------
+  #    chef_solo
+  # -----------------------------------------
 
   config.berkshelf.enabled = true
   config.berkshelf.berksfile_path = "./cookbooks/setupcarthage/Berksfile"
@@ -31,12 +42,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #]
     chef.add_recipe "setupcarthage"
   end
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
 
+  # -----------------------------------------
+  #    docker
+  # -----------------------------------------
+  
+  #config.vm.provision "docker" do |d|
+  #  d.pull_images "samit2040/carthage:latest"
+  #end
+  #config.vm.provision "docker" do |d|	
+  #	d.run "samit2040/carthage:latest",
+  #	daemonize: true,
+  #	args: "--privileged=true --name=carthagecontainer -p 8888:8080",
+  #	restart: "always"
+  #end
+  #config.vm.network "forwarded_port", guest: 8888, host: 8888
 
-  # Every Vagrant virtual environment requires a box to build off of.
-  # If this value is a shorthand to a box in Vagrant Cloud then
-  # config.vm.box_url doesn't need to be specified.
-  config.vm.box = 'bento/ubuntu-14.04'
 
 
   # Assign this VM to a host-only network IP, allowing you to access it
