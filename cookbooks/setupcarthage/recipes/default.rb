@@ -7,12 +7,13 @@
 # All rights reserved - Do Not Redistribute
 #
 include_recipe 'java'
-#include_recipe 'maven'
+# include_recipe 'maven'
 
-node.default['jenkins']['master']['version'] = '2.63'
+#node.default['jenkins']['master']['version'] = '2.63'
 include_recipe 'jenkins::master'
 
-
+package 'maven' 
+=begin
 
 git_client 'default' do
   action :install
@@ -39,7 +40,8 @@ jenkins_plugin 'scm-api' do
 end
 
 
-xml = File.join('Chef::Config[:file_cache_path]','carthage-config.xml')
+# xml = File.join('Chef::Config[:file_cache_path]','carthage-config.xml')
+xml = File.join('/var/chef/cache','carthage-config.xml')
 
 template xml do
   source 'job-config.xml.erb'

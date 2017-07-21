@@ -40,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #chef.run_list = [
   #  'recipe[java]'
   #]
-    chef.add_recipe "setupcarthage"
+    chef.add_recipe "setupcarthage" #::trial"
   end
   config.vm.network "forwarded_port", guest: 8080, host: 8000
 
