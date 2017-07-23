@@ -13,17 +13,20 @@ include_recipe 'java'
 #node.default['jenkins']['master']['version'] = '2.63'
 include_recipe 'jenkins::master'
 
-#package 'maven' 
+package 'maven' 
 
 
 # out this at the end credentials=2.1.2 ssh-credentials=1.6.1 ssh-slaves=1.20 bouncycastle-api=2.16.1 structs=1.9 ssh-credentials=1.6.1 credentials=2.1.10 
-%w{ ssh-slaves=1.20  }.each do |plugin|
+node['jenkins']['plugins'].each do |plugin|
  name, ver = plugin.split('=')
  jenkins_plugin name do
   version ver
-  install_deps true
-  notifies :restart, 'service[jenkins]', :immediately
+  install_deps false
+  # notifies :restart, 'service[jenkins]', :immediately
  end
+end
+execute 'restart the jenkins' do
+  command 'sudo service jenkins restart'
 end
 
 # Create password credentials
