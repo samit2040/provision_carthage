@@ -2,21 +2,26 @@
 # Cookbook Name:: setupcarthage
 # Recipe:: default
 #
-# Copyright (C) 2017 YOUR_NAME
+# Copyright (C) 2017 Amit Sharma
 #
 # All rights reserved - Do Not Redistribute
 #
 
 include_recipe 'java'
-# include_recipe 'maven'
+include_recipe 'maven'
+
+mvnVersion = "#{node['maven']['version']}"
+
+execute 'create a symlink' do
+  command 'sudo ln -s /usr/local/maven-'+mvnVersion+'/bin/mvn /usr/bin/mvn'
+end
+
 
 #node.default['jenkins']['master']['version'] = '2.63'
 include_recipe 'jenkins::master'
 
-package 'maven' 
 
 
-# out this at the end credentials=2.1.2 ssh-credentials=1.6.1 ssh-slaves=1.20 bouncycastle-api=2.16.1 structs=1.9 ssh-credentials=1.6.1 credentials=2.1.10 
 node['jenkins']['plugins'].each do |plugin|
  name, ver = plugin.split('=')
  jenkins_plugin name do
@@ -37,10 +42,10 @@ jenkins_password_credentials 'vagrant' do
 end
 
 # Create a slave launched via SSH
-jenkins_ssh_slave 'slave1' do
+jenkins_ssh_slave 'vagrant-vm' do
   description 'Run Carthage '
   remote_fs   '/home/vagrant'
-  labels      ['vagrant-vm']
+  labels      ['vagrant-vm','maven','java','docker']
 
   # SSH specific attributes
   host        'localhost' # or 'slave.example.org'
@@ -51,8 +56,30 @@ jenkins_ssh_slave 'slave1' do
   ssh_wait_retries 60
 end
 # strting the slave
-jenkins_ssh_slave 'slave1' do
+jenkins_ssh_slave 'vagrant-vm' do
   action :connect
+end
+
+
+# xml = File.join('Chef::Config[:file_cache_path]','carthage-pipeline-config.xml')
+pipelineXml = File.join('/var/chef/cache','carthage-pipeline-config.xml')
+
+template pipelineXml do
+  source 'job-config-pipeline.xml.erb'
+end
+
+jenkins_job 'carthage-pipeline' do
+  config pipelineXml
+end
+
+freeStyleXml = File.join('/var/chef/cache','carthage-deploy-docker-config.xml')
+
+template freeStyleXml do
+  source 'job-config-freeStyle.xml.erb'
+end
+
+jenkins_job 'carthage-deploy-docker' do
+  config freeStyleXml
 end
 
 docker_service 'default' do
@@ -74,6 +101,10 @@ git_client 'default' do
   action :install
 end
 
+execute 'docker login' do
+  command 'sudo docker  login --username=samit2040 --password=samit2040'
+end
+
 =begin
 jenkins_command 'safe-restart'
 
@@ -86,43 +117,7 @@ docker_registry 'https://index.docker.io/v1/' do
   password 'samit2040'
   email 'samit2040@gmail.com'
 end
-#------------------- git plugin dependencies
 
-jenkins_plugin 'git' do 
-    version '3.4.1'
-    install_deps true
-    notifies :restart, 'service[jenkins]', :immediately
-end
 
-jenkins_plugin 'structs' do 
-    version '1.9'
-    action :install
-end
-
-jenkins_plugin 'scm-api' do 
-    version '2.2.0'
-    action :install
-end
-=end
-
-# xml = File.join('Chef::Config[:file_cache_path]','carthage-config.xml')
-xml = File.join('/var/chef/cache','carthage1-config.xml')
-
-template xml do
-  source 'job-config.xml.erb'
-end
-
-jenkins_job 'carthage1' do
-  config xml
-end
-
-=begin
-
-%w{ structs=1.9 scm-api=2.2.0 git=3.4.1 }.each do |addon|
- name, ver = plugin.split('=')
- jenkins_plugin name do
- version ver
- end
-end
 =end
 

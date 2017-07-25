@@ -3,7 +3,7 @@ source "https://supermarket.chef.io"
 metadata
 cookbook 'java', '~> 1.50.0'
 cookbook 'jenkins', '~> 5.0.3'
-# cookbook 'maven', '~> 5.0.1'
+cookbook 'maven', '~> 5.0.1'
 cookbook 'git', '~> 6.1.0'
-cookbook 'apt', '~> 6.1.2'
+#cookbook 'apt', '~> 6.1.2'
 cookbook 'docker', '~> 2.0'
