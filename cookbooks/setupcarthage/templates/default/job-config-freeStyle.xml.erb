@@ -1,0 +1,42 @@
+<project>
+<actions/>
+<description/>
+<keepDependencies>false</keepDependencies>
+<properties/>
+<scm class="hudson.plugins.git.GitSCM" plugin="git@3.4.1">
+<configVersion>2</configVersion>
+<userRemoteConfigs>
+<hudson.plugins.git.UserRemoteConfig>
+<url>https://github.com/samit2040/carthage.git</url>
+</hudson.plugins.git.UserRemoteConfig>
+</userRemoteConfigs>
+<branches>
+<hudson.plugins.git.BranchSpec>
+<name>*/master</name>
+</hudson.plugins.git.BranchSpec>
+</branches>
+<doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+<submoduleCfg class="list"/>
+<extensions/>
+</scm>
+<canRoam>true</canRoam>
+<disabled>false</disabled>
+<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+<triggers/>
+<concurrentBuild>false</concurrentBuild>
+<builders>
+<hudson.tasks.Shell>
+<command>git clone https://github.com/samit2040/carthage.git</command>
+</hudson.tasks.Shell>
+<hudson.tasks.Maven>
+<targets>package</targets>
+<usePrivateRepository>false</usePrivateRepository>
+<settings class="jenkins.mvn.DefaultSettingsProvider"/>
+<globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
+<injectBuildVariables>false</injectBuildVariables>
+</hudson.tasks.Maven>
+</builders>
+<publishers/>
+<buildWrappers/>
+</project>

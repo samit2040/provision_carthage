@@ -1,9 +1,14 @@
-<project>
+<flow-definition plugin="workflow-job@2.7">
 <actions/>
 <description/>
 <keepDependencies>false</keepDependencies>
-<properties/>
-<scm class="hudson.plugins.git.GitSCM" plugin="git@3.4.1">
+<properties>
+<org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+<triggers/>
+</org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+</properties>
+<definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2.18">
+<scm class="hudson.plugins.git.GitSCM" plugin="git@3.0.0">
 <configVersion>2</configVersion>
 <userRemoteConfigs>
 <hudson.plugins.git.UserRemoteConfig>
@@ -19,24 +24,7 @@
 <submoduleCfg class="list"/>
 <extensions/>
 </scm>
-<canRoam>true</canRoam>
-<disabled>false</disabled>
-<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+<scriptPath>Jenkinsfile</scriptPath>
+</definition>
 <triggers/>
-<concurrentBuild>false</concurrentBuild>
-<builders>
-<hudson.tasks.Shell>
-<command>echo $PATH</command>
-</hudson.tasks.Shell>
-<hudson.tasks.Maven>
-<targets>package</targets>
-<usePrivateRepository>false</usePrivateRepository>
-<settings class="jenkins.mvn.DefaultSettingsProvider"/>
-<globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
-<injectBuildVariables>false</injectBuildVariables>
-</hudson.tasks.Maven>
-</builders>
-<publishers/>
-<buildWrappers/>
-</project>
+</flow-definition>

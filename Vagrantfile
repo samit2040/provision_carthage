@@ -43,6 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "setupcarthage" #::trial"
   end
   config.vm.network "forwarded_port", guest: 8080, host: 8000
+  config.vm.network "forwarded_port", guest: 8888, host: 8888
 
   # -----------------------------------------
   #    docker

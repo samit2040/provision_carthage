@@ -61,10 +61,14 @@ end
 execute 'add vagrant user to docker group' do
   command 'sudo usermod -aG docker vagrant'
 end
+
+docker_registry 'https://index.docker.io/v1/' do
+  username 'samit2040'
+  password 'samit2040'
+end
 docker_service 'default' do
   action :start
 end
-
 
 git_client 'default' do
   action :install
@@ -73,6 +77,15 @@ end
 =begin
 jenkins_command 'safe-restart'
 
+execute 'docker login' do
+  command 'docker  login --username=samit2040 --password=samit2040'
+end
+
+docker_registry 'https://index.docker.io/v1/' do
+  username 'samit2040'
+  password 'samit2040'
+  email 'samit2040@gmail.com'
+end
 #------------------- git plugin dependencies
 
 jenkins_plugin 'git' do 
@@ -93,13 +106,13 @@ end
 =end
 
 # xml = File.join('Chef::Config[:file_cache_path]','carthage-config.xml')
-xml = File.join('/var/chef/cache','carthage-config.xml')
+xml = File.join('/var/chef/cache','carthage1-config.xml')
 
 template xml do
   source 'job-config.xml.erb'
 end
 
-jenkins_job 'carthage' do
+jenkins_job 'carthage1' do
   config xml
 end
 
