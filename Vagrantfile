@@ -11,6 +11,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
   config.vm.hostname = 'carthage-berkshelf'
   
   # Every Vagrant virtual environment requires a box to build off of.
@@ -42,8 +44,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #]
     chef.add_recipe "setupcarthage" #::trial"
   end
-  config.vm.network "forwarded_port", guest: 8080, host: 8000
-  config.vm.network "forwarded_port", guest: 8888, host: 8888
+  config.vm.network "forwarded_port", guest: 8080, host: 9090
+  config.vm.network "forwarded_port", guest: 8888, host: 9999
 
   # -----------------------------------------
   #    docker

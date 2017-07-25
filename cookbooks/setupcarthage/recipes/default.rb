@@ -11,15 +11,36 @@ include_recipe 'java'
 include_recipe 'maven'
 
 mvnVersion = "#{node['maven']['version']}"
-
 execute 'create a symlink' do
-  command 'sudo ln -s /usr/local/maven-'+mvnVersion+'/bin/mvn /usr/bin/mvn'
+  command 'sudo ln -sf /usr/local/maven-'+mvnVersion+'/bin/mvn /usr/bin/mvn'
 end
 
+#docker installation
+docker_service 'default' do
+  action :create
+end
+execute 'add vagrant user to docker group' do
+  command 'sudo usermod -aG docker vagrant'
+end
 
-#node.default['jenkins']['master']['version'] = '2.63'
+docker_registry 'https://index.docker.io/v1/' do
+  username 'samit2040'
+  password 'samit2040'
+end
+docker_service 'default' do
+  action :start
+end
+execute 'docker login' do
+  command 'sudo docker  login --username=samit2040 --password=samit2040'
+end
+
+#git installation
+git_client 'default' do
+  action :install
+end
+
+# Complete jenkins setup
 include_recipe 'jenkins::master'
-
 
 
 node['jenkins']['plugins'].each do |plugin|
@@ -82,42 +103,4 @@ jenkins_job 'carthage-deploy-docker' do
   config freeStyleXml
 end
 
-docker_service 'default' do
-  action :create
-end
-execute 'add vagrant user to docker group' do
-  command 'sudo usermod -aG docker vagrant'
-end
-
-docker_registry 'https://index.docker.io/v1/' do
-  username 'samit2040'
-  password 'samit2040'
-end
-docker_service 'default' do
-  action :start
-end
-
-git_client 'default' do
-  action :install
-end
-
-execute 'docker login' do
-  command 'sudo docker  login --username=samit2040 --password=samit2040'
-end
-
-=begin
 jenkins_command 'safe-restart'
-
-execute 'docker login' do
-  command 'docker  login --username=samit2040 --password=samit2040'
-end
-
-docker_registry 'https://index.docker.io/v1/' do
-  username 'samit2040'
-  password 'samit2040'
-  email 'samit2040@gmail.com'
-end
-
-
-=end
-
