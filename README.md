@@ -8,7 +8,7 @@ Provisioning using Vagrant and chef-solo
 
 ### To spin up the box
 1. clone this repo and from the root fire:
-2. vagrant plugin install vagrant-berkshelf
+2. vagrant plugin install vagrant-berkshelf (from anywhere it can be fired, creates a berkshlef location for cookbooks)
 3. vagrant up
 
 ### Creates a box with the following in it
