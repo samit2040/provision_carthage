@@ -10,9 +10,9 @@
 include_recipe 'java'
 include_recipe 'maven'
 
-mvnVersion = "#{node['maven']['version']}"
+mvn_version = "#{node['maven']['version']}"
 execute 'create a symlink' do
-  command 'sudo ln -sf /usr/local/maven-'+mvnVersion+'/bin/mvn /usr/bin/mvn'
+  command 'sudo ln -sf /usr/local/maven-'+mvn_version+'/bin/mvn /usr/bin/mvn'
 end
 
 #docker installation
@@ -83,14 +83,19 @@ end
 
 
 # xml = File.join('Chef::Config[:file_cache_path]','carthage-pipeline-config.xml')
-pipelineXml = File.join('/var/chef/cache','carthage-pipeline-config.xml')
+config_xml_carthage_pipeline = File.join('/var/chef/cache','carthage-pipeline-config.xml')
 
-template pipelineXml do
+template config_xml_carthage_pipeline do
   source 'job-config-pipeline.xml.erb'
+  variables({   
+     :git_repo_url => 'https://github.com/samit2040/carthage.git' ,
+     :git_repo_branch => 'master' , 
+     :pipeline_script_path => 'Jenkinsfile'
+  })
 end
 
 jenkins_job 'carthage-pipeline' do
-  config pipelineXml
+  config config_xml_carthage_pipeline
 end
 
 freeStyleXml = File.join('/var/chef/cache','carthage-deploy-docker-config.xml')
