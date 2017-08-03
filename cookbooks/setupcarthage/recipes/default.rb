@@ -108,4 +108,13 @@ jenkins_job 'carthage-deploy-docker' do
   config freeStyleXml
 end
 
+jenkins_script 'set number of executors' do
+  command <<-EOF
+import hudson.model.*
+Hudson hudson = Hudson.getInstance()
+hudson.setNumExecutors(0)
+hudson.save()
+  EOF
+end
+
 jenkins_command 'safe-restart'
