@@ -2,9 +2,23 @@
 <actions/>
 <description/>
 <keepDependencies>false</keepDependencies>
-<properties/>
+<properties>
+<hudson.model.ParametersDefinitionProperty>
+<parameterDefinitions>
+<jp.ikedam.jenkins.plugins.extensible__choice__parameter.ExtensibleChoiceParameterDefinition plugin="extensible-choice-parameter@1.3.2">
+<name>carthage_version</name>
+<description>Select the docker version to deploy</description>
+<editable>false</editable>
+<choiceListProvider class="jp.ikedam.jenkins.plugins.extensible_choice_parameter.SystemGroovyChoiceListProvider">
+<scriptText>import groovy.json.JsonSlurper;dockerJson=new URL("https://hub.docker.com/v2/repositories/samit2040/carthage/tags/").getText();def carthageDockerImageTags = (new JsonSlurper().parseText(dockerJson)).results['name'];return carthageDockerImageTags </scriptText>
+<defaultChoice>latest</defaultChoice>
+<usePredefinedVariables>false</usePredefinedVariables>
+</choiceListProvider>
+</jp.ikedam.jenkins.plugins.extensible__choice__parameter.ExtensibleChoiceParameterDefinition>
+</parameterDefinitions>
+</hudson.model.ParametersDefinitionProperty>
+</properties>
 <scm class="hudson.scm.NullSCM"/>
-<assignedNode>vagrant-vm</assignedNode>
 <canRoam>true</canRoam>
 <disabled>false</disabled>
 <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -13,9 +27,18 @@
 <concurrentBuild>false</concurrentBuild>
 <builders>
 <hudson.tasks.Shell>
-<command>#docker rm -f carthagecontainer#docker rmi -f samit2040/carthage:#docker pull samit2040/carthage:latest#docker run -d --privileged=true --name=carthagecontainer -p 8888:8080 samit2040/carthage:latest</command>
+<command>echo "-----BEGIN RSA PRIVATE KEY-----MIIEpAIBAAKCAQEAkgoE6a5ImdjisTGK32j6iE7Lj/Yr6BAiqLtFsQnuvsxnxSkNDm8bK+nQ1Lj4n1DGKntNHGejX4YIbWsHnOPIyfYHN13TLBp7KbMEoFZih3Mcu+gn0YJktjgjlcFstU/am4xSs7gu9MLhzdhrIKdEjuincJqvPdTlPUdEPUTMv7nBDYlWQRC/rwoiq6S3zZ9SMlwLrsZPNLY0LgSnRZFLGVSN9nVKAPoeebN8TmMnp3Ef6GT4JgHK6hoeRfVQI78g1Q6tlJ4/uVJWD87mSoQVhrAh+SYvQvkrhGiDBf8urX/Mu3vMowdEkXymXNQeihnwaIWc5O5eqE3zPJ6XkHA5sQIDAQABAoIBAAZhN6u5uGQ4LFcPUgDGhkNUJeJpH6vooIr8e2Priil9pn7fdzmNMwOtGDlix0G2dqG+dzTpdiKjKVUWWuPIs6nW/KO3jpUbpwvATVBv1agTKEsxLiQh7SJku3E8XPJixasL60T8o9h/dvvWG3/2rrELit0JdORfm5Acv+dpTQSHGNfG2aPTgS6oPem+/P1r5CR9iPOu1KjbJEsAWEUz5i8dRJni0D9IUEwvpBOPdbz+dvM0CPHvt5at0O94tfMq4+V1fUAwhrT0m9jYvr4sP8DegLD9i3B17W2r49H2tlWnuIYWlcBQwOiNPloulfypaTG2zZLSUgIej1LYpDPGvxECgYEA208b4ohrKD9OKobpR4q7+3USdYQB6Os/eaKRLFd+n3MIGvrA01QZP+djbWRmWFIR7GVeUNc5EwfkjMLO/3IWW6CDL8jHLYWxwGTuG74GDZJDmrI5aM4qhnbZ2rxcl51J8+ZcxtBjeeYF9f7LriBRDYqlrQRb3uiATBbhAOMGjR0CgYEAqnjMpMAlGVguA5cD+qRGASItpic1v9IzHcjSxit8ryK5666XNmBJnSnKRHTkpAPlJwXu8eJDLBcEsSPc9LHxGkx5XaKMr4gv7/AInkt8skhz5l9Qhpy+YX1jmp62UxLjTKTqdcgLIyo+L6icrUiqOqmn2NdfMGW1vTJw3V5ffqUCgYEAr8zHhp1igN3WVALXx5Cvxg//3xIV0deah2/IvenZSAoXKkFuBzm4D+D1dAByhkQrt/s+UsFkMBw4mpmjA2Q6BfMylkB1Ycl1Rsvhj32RLpnb9Yr+uEPkFOv7EPvDoYnleU1le74ar+GzT5GTRp8DOj61Nm9zEcoA5n3EmkhivQUCgYBw0o4uI3TqNzAM9C+P/JTQPzyTELREBewKtFS7DyDwED2YO+6b8FIIEBZsBCkmW+WXVBf2QldOoNVcH24nDHWTgDV6wQ/3RFzloakyiqc2nzkFqON0k9x0TTZUqOHmTUPd/++kkAa++UA67o7zKHpxZMNPggrfzxDe7LlB6SmueQKBgQCdyvMZG62sXJksHGaXc0NbrbV1J0nJgZyVAipMZ7eYrFhKXteIYvvjnzp0WeotDlWkagKallbiADTsljNrcTYDWlNIoij3Be4ZjDHnpPq600lBiHwF3Zro7qiu83KnDfqsT9cscq7vfSL1XzyyI/qusxe08vlix3KG3ZLXRGDmWA==-----END RSA PRIVATE KEY-----" > ubuntu.pemchmod 400 ubuntu.pem</command>
+</hudson.tasks.Shell>
+<hudson.tasks.Shell>
+<command>echo "docker rm -f carthagecontainerdocker rmi -f samit2040/carthage:$carthage_versiondocker pull samit2040/carthage:$carthage_versiondocker run -d --privileged=true --name=carthagecontainer -p 8888:8080 samit2040/carthage:$carthage_versionecho \"carthage is up at port 8888 \"" > carthageDeployer.shchmod 777 carthageDeployer.shscp -o StrictHostKeyChecking=no -i "ubuntu.pem" carthageDeployer.sh ubuntu@ec2-54-149-114-0.us-west-2.compute.amazonaws.com:.ssh -o StrictHostKeyChecking=no -i "ubuntu.pem" ubuntu@ec2-54-149-114-0.us-west-2.compute.amazonaws.com ./carthageDeployer.sh</command>
 </hudson.tasks.Shell>
 </builders>
 <publishers/>
-<buildWrappers/>
+<buildWrappers>
+<hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.30">
+<deleteDirs>false</deleteDirs>
+<cleanupParameter/>
+<externalDelete/>
+</hudson.plugins.ws__cleanup.PreBuildCleanup>
+</buildWrappers>
 </project>

@@ -17,6 +17,7 @@ default['jenkins']['master']['install_method'] = "war"
 #default['jenkins']['master']['use_system_accounts'] = true
 #default['jenkins']['master']['home'] = '/home/vagrant/jenkins'
 
+=begin
 
 default['jenkins']['plugins'] = [ 
     "bouncycastle-api=1.648.3",
@@ -119,3 +120,4 @@ default['jenkins']['plugins'] = [
 "momentjs=1.1.1"
 
 ]
+=end
